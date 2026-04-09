@@ -1,0 +1,15 @@
+# 환경변수
+.env.local
+.env*.local
+
+# 의존성
+node_modules/
+
+# 빌드 결과물
+dist/
+dist-ssr/
+
+# 에디터
+.DS_Store
+.vscode/
+.idea/
