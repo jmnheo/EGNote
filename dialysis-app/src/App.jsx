@@ -11,7 +11,7 @@ export default function App() {
     return (
       <PatientDetail
         patient={selected}
-        procedures={getProceduresFor(selected.name)}
+        grouped={getProceduresFor(selected.name)}
         onBack={() => setSelected(null)}
       />
     );

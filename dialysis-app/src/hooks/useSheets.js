@@ -44,8 +44,24 @@ export function useSheets() {
     ? patients.filter((p) => p.group === todayGroup)
     : patients;
 
-  const getProceduresFor = (name) =>
-    procedures.filter((pr) => pr.name === name).sort((a, b) => b.date.localeCompare(a.date));
+  // 환자별 시술이력을 카테고리로 그룹핑하고, 같은 시술명은 날짜 목록으로 묶어 최신순 정렬
+  const getProceduresFor = (name) => {
+    const patientProcedures = procedures
+      .filter((pr) => pr.name === name)
+      .sort((a, b) => b.date.localeCompare(a.date));
+
+    // { 카테고리: { 시술명: [날짜, ...] } } 형태로 그룹핑
+    const grouped = {};
+    for (const pr of patientProcedures) {
+      const cat = pr.category || '기타';
+      const proc = pr.procedure || '-';
+      if (!grouped[cat]) grouped[cat] = {};
+      if (!grouped[cat][proc]) grouped[cat][proc] = [];
+      grouped[cat][proc].push({ date: pr.date, memo: pr.memo });
+    }
+
+    return grouped;
+  };
 
   return {
     patients: filteredPatients,

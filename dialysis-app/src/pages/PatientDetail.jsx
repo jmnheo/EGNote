@@ -11,7 +11,7 @@ function InfoRow({ label, value }) {
   );
 }
 
-export function PatientDetail({ patient, procedures, onBack }) {
+export function PatientDetail({ patient, grouped, onBack }) {
   const { name, birthdate, age, group, note } = patient;
 
   return (
@@ -50,7 +50,7 @@ export function PatientDetail({ patient, procedures, onBack }) {
           <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-1 mb-2">
             시술 이력
           </h2>
-          <ProcedureList procedures={procedures} />
+          <ProcedureList grouped={grouped} />
         </div>
       </div>
     </div>
