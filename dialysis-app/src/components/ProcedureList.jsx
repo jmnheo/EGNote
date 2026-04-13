@@ -1,11 +1,21 @@
+import { Droplet, Heart, Pill, FlaskConical, Stethoscope } from 'lucide-react';
+
+const CATEGORY_ICONS = {
+  혈관: Droplet,
+  심장: Heart,
+  투약: Pill,
+  검사: FlaskConical,
+};
+
 function CategorySection({ category, procedures }) {
-  const icon = '📋';
+  const Icon = CATEGORY_ICONS[category] || Stethoscope;
 
   return (
     <div>
       {/* 카테고리 구분선 */}
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-sm font-bold text-slate-600">{icon} {category}</span>
+      <div className="flex items-center gap-2 mb-4">
+        <Icon className="w-4 h-4 text-slate-500 shrink-0" />
+        <span className="text-sm font-bold text-slate-600">{category}</span>
         <div className="flex-1 h-px bg-slate-200" />
       </div>
 
@@ -34,7 +44,6 @@ function CategorySection({ category, procedures }) {
 }
 
 function formatDate(dateStr) {
-  // YYYY-MM-DD → YY.MM.DD 형식으로 변환
   if (!dateStr) return dateStr;
   const match = dateStr.match(/^(\d{2})\d{2}-(\d{2})-(\d{2})$/);
   if (match) return `${match[1]}.${match[2]}.${match[3]}`;
