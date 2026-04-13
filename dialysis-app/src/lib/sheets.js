@@ -5,12 +5,35 @@ const BASE_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID
 
 async function fetchRange(range) {
   const url = `${BASE_URL}/${encodeURIComponent(range)}?key=${API_KEY}&valueRenderOption=FORMATTED_VALUE`;
-  const res = await fetch(url);
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `Sheets API 오류 (${res.status})`);
+
+  console.log('[Sheets] fetch 시작:', range);
+  console.log('[Sheets] SPREADSHEET_ID:', SPREADSHEET_ID ? SPREADSHEET_ID.slice(0, 8) + '...' : '❌ 없음');
+  console.log('[Sheets] API_KEY:', API_KEY ? API_KEY.slice(0, 8) + '...' : '❌ 없음');
+
+  let res;
+  try {
+    res = await fetch(url);
+  } catch (networkErr) {
+    console.error('[Sheets] 네트워크 오류:', networkErr);
+    throw new Error(`네트워크 오류: ${networkErr.message}`);
   }
+
+  console.log('[Sheets] 응답 status:', res.status, res.statusText);
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error('[Sheets] 오류 응답 body:', body);
+    let message = `HTTP ${res.status} ${res.statusText}`;
+    try {
+      const json = JSON.parse(body);
+      message = json?.error?.message || message;
+      console.error('[Sheets] 오류 상세:', json?.error);
+    } catch (_) {}
+    throw new Error(message);
+  }
+
   const data = await res.json();
+  console.log('[Sheets] 수신 행 수:', (data.values || []).length, `(${range})`);
   return data.values || [];
 }
 
