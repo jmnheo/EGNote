@@ -1,5 +1,5 @@
 function CategorySection({ category, procedures }) {
-  const icon = category === '혈관' ? '🩸' : category === '심장' ? '❤️' : '📋';
+  const icon = '📋';
 
   return (
     <div>
